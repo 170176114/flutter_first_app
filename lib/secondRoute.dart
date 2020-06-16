@@ -48,13 +48,34 @@ class HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context){
+
+// Container(
+//   height: 44.0,
+//   child: ListView(
+//     scrollDirection: Axis.horizontal,
+//     children: <Widget>[
+//       RaisedButton(
+//         onPressed: null,
+//         child: Text("Facebook"),
+//       ),
+//       Padding(padding: EdgeInsets.all(5.00)),
+//       RaisedButton(
+//         onPressed: null,
+//         child: Text("Google"),
+//       )
+//     ],
+//   ),
+// );
+
+
     return new Scaffold(
       appBar: new AppBar(title: new Text("Listviews"), backgroundColor: Colors.blue),
       body: new ListView.builder(
         itemCount: data == null ? 0 : data.length,
         itemBuilder: (BuildContext context, int index){
           return new Card(
-            child: new Text(data[index]["comment"]),
+            
+             child: new Text(data[index]["comment"]),
             //child: new Text(data[index]["username"])
           );
         },
