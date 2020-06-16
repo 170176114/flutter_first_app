@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:myapp/data.dart';
+import 'package:myapp/firstRoute.dart';
 import 'package:myapp/secondRoute.dart';
 import 'package:myapp/thirdRoute.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:convert';
 
 void main() {
   runApp(MyApp());
@@ -28,7 +33,8 @@ class MyApp extends StatelessWidget {
         // closer together (more dense) than on mobile platforms.
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'BMI'),
+      home: MyHomePage(title: 'Application'),
+
     );
   }
 }
@@ -52,18 +58,23 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
-    });
+  Future<data> Data;
+  @override
+  void initState() {
+    super.initState();
+    Data = fetchData();
   }
+
+  // void _incrementCounter() {
+  //   setState(() {
+  //     // This call to setState tells the Flutter framework that something has
+  //     // changed in this State, which causes it to rerun the build method below
+  //     // so that the display can reflect the updated values. If we changed
+  //     // _counter without calling setState(), then the build method would not be
+  //     // called again, and so nothing would appear to happen.
+  //     _counter++;
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,18 +90,36 @@ class _MyHomePageState extends State<MyHomePage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(       
+      body: Center(  
+        // child: FutureBuilder<data>(
+        //   future: Data,
+        //   builder: (context, snapshot){
+        //     if (snapshot.hasData) {
+        //       return Text(snapshot.data.username);
+        //       //Text(snapshot.data.comment);
+        //     }else if (snapshot.hasError){
+        //       print(snapshot.error);
+        //       return Text("${snapshot.error}");
+        //     }
+        //     return null;
+        //     //return CircularProgressIndicator();
+        //   },
+        // ),
+
         child: new Column(
           mainAxisAlignment: MainAxisAlignment.center,
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'This is BMI Application',
+              'This is Application',
             ),
             RaisedButton(child: Text('Button1'),
             onPressed: btnClickEvent,
             ),
             RaisedButton(child: Text('Button2'),
+            onPressed: btn2,
+            ),
+            RaisedButton(child: Text('Button3'),
             onPressed: Jump,
             )
           ],
@@ -104,16 +133,32 @@ class _MyHomePageState extends State<MyHomePage> {
       // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+  void btn2(){
+    Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => HomePage()),
+  );
+  }
   void btnClickEvent(){
     Navigator.push(
     context,
-    MaterialPageRoute(builder: (context) => SecondRoute()),
+    MaterialPageRoute(builder: (context) => FirstRoute()),
   );
   }
+
     void Jump(){
     Navigator.pushReplacement(
     context,
     MaterialPageRoute(builder: (context) => ThirdRoute()),
   );
   }
+}
+Future<data> fetchData() async {
+  final response = await http.get('http://192.168.0.119/first/get.php');
+  if (response.statusCode == 200) {
+    return data.fromJson(json.decode(response.body));
+  }else {
+    throw Exception('Fail to load data');
+  }
+  
 }
