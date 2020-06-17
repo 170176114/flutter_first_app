@@ -26,7 +26,7 @@ class HomePageState extends State<HomePage> {
 
   Future<String> getData() async {
     var response = await http.get(
-      Uri.encodeFull("http://192.168.0.119/first/get.php"),
+      Uri.encodeFull("http://192.168.1.101/first/get.php"),
       headers: {
         "Accept": "application/json"
       }
@@ -36,7 +36,7 @@ class HomePageState extends State<HomePage> {
       data = json.decode(response.body);
     });
     
-    print(data[1]["title"]);
+    //print(data[1]["title"]);
     
     return "Success!";
   }
@@ -69,7 +69,7 @@ class HomePageState extends State<HomePage> {
 
 
     return new Scaffold(
-      appBar: new AppBar(title: new Text("Listviews"), backgroundColor: Colors.blue),
+      appBar: new AppBar(title: new Text("Secound Route"), backgroundColor: Colors.blue),
       body: new ListView.builder(
         itemCount: data == null ? 0 : data.length,
         itemBuilder: (BuildContext context, int index){

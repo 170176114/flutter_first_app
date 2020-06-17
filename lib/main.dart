@@ -62,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    Data = fetchData();
   }
 
   // void _incrementCounter() {
@@ -152,13 +151,4 @@ class _MyHomePageState extends State<MyHomePage> {
     MaterialPageRoute(builder: (context) => ThirdRoute()),
   );
   }
-}
-Future<data> fetchData() async {
-  final response = await http.get('http://192.168.0.119/first/get.php');
-  if (response.statusCode == 200) {
-    return data.fromJson(json.decode(response.body));
-  }else {
-    throw Exception('Fail to load data');
-  }
-  
 }
