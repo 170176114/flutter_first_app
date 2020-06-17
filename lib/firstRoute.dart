@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
+import 'package:myapp/Post.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -12,12 +13,16 @@ void main() {
   ));
 }
 
-
-
+final inputtextField1  = TextEditingController();
+final inputtextField2  = TextEditingController();
+final CREATE_POST_URL = 'http://192.168.1.101/first/post.php';
 
 class FirstRoute extends StatelessWidget {
-TextEditingController inputtextField  = TextEditingController();
+  final Future<Post> post;
+
+  const FirstRoute({Key key, this.post}) : super(key: key);
   
+
   @override
   Widget build(BuildContext context) {
 
@@ -35,7 +40,7 @@ TextEditingController inputtextField  = TextEditingController();
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                controller: inputtextField,
+                controller: inputtextField1,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Username'
@@ -45,12 +50,23 @@ TextEditingController inputtextField  = TextEditingController();
               Padding(
               padding: const EdgeInsets.all(16.0),
               child: TextField(
-                controller: inputtextField,
+                controller: inputtextField2,
                 decoration: InputDecoration(
                   border: OutlineInputBorder(),
                   labelText: 'Comment'
                 ),
               ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: RaisedButton(child: Text('Post'),
+                      //onPressed: _postData,
+                      onPressed: () async {
+                          Navigator.pop(context);
+                          Post newPost = new Post(username: inputtextField1.text, comment: inputtextField2.text);
+                          Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+                      },
+                ),
               )
           ],
           ),
@@ -66,15 +82,21 @@ TextEditingController inputtextField  = TextEditingController();
     );
   }
 }
+// void _postData() async{
+//   Post newPost = new Post(username: inputtextField1.text, comment: inputtextField2.text);
+//   Post p = await createPost(CREATE_POST_URL, body: newPost.toMap());
+  
+//   //print(p.username);
+// }
 
-_makeRostRequest() async {
-  String url = "http://192.168.1.101/first/post.php";
-  Map<String, String> headers = {"Content-type": "application/json"};
-  String json = '{"username" : "z", "comment" : "x"}';
-  Response response = await post(url, headers: headers, body: json);
-  int statusCode = response.statusCode;
-  String body = response.body;
-}
+// _makeRostRequest() async {
+//   String url = "http://192.168.1.101/first/post.php";
+//   Map<String, String> headers = {"Content-type": "application/json"};
+//   //String json = '{"username" : "z", "comment" : "x"}';
+//   Response response = await post(url, headers: headers, body: json);
+//   int statusCode = response.statusCode;
+//   String body = response.body;
+// }
 
 // Future<http.Response> postRequest() async {
 //   var url = "http://192.168.1.101/first/post.php";
@@ -87,4 +109,13 @@ _makeRostRequest() async {
 //   return response;
 // }
  
-
+Future<Post> createPost(String url, {Map body}) async {
+  return http.post(url, body: body).then((http.Response response) {
+    final int statusCode = response.statusCode;
+ 
+    if (statusCode < 200 || statusCode > 400 || json == null) {
+      throw new Exception("Error while fetching data");
+    }
+    return Post.fromJson(json.decode(response.body));
+  });
+}
