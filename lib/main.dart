@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:myapp/data.dart';
 import 'package:myapp/firstRoute.dart';
 import 'package:myapp/secondRoute.dart';
 import 'package:myapp/thirdRoute.dart';
@@ -58,7 +57,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  Future<data> Data;
   @override
   void initState() {
     super.initState();

@@ -1,6 +1,7 @@
 import 'dart:developer';
-
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:flutter/material.dart';
+import 'package:myapp/ItemDetail.dart';
 import 'package:myapp/data.dart';
 import 'package:http/http.dart' as http;
 import 'dart:async';
@@ -72,21 +73,33 @@ class HomePageState extends State<HomePage> {
           //   //child: new Text(data[index]["username"])
           // );
 
-          return new Card(
-              child: new Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-            new Padding(
-              
-              padding: const EdgeInsets.fromLTRB(20.0,10.0,20.0,20.0),
-              child: Text(data[index]["username"]),
-            ),
-            new Padding(
-              padding: const EdgeInsets.fromLTRB(20.0,10.0,20.0,20.0),
-              child: Text(data[index]["comment"]),
-              
-            ),
-          ]));
+          return new GestureDetector(
+              onTap: () {
+                //var SelectedItem = data[index]["id"];
+                var SelectedItem = data[index];
+
+
+                Navigator.push(context,MaterialPageRoute(builder: (context) => ItemDetail( value: [SelectedItem], ) ),
+                );
+                
+              //print(SelectedItem);
+
+              },
+              child: new Card(
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                    new Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
+                      child: Text(data[index]["username"]),
+                    ),
+                    new Padding(
+                      padding:
+                          const EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 20.0),
+                      child: Text(data[index]["comment"]),
+                    ),
+                  ])));
         },
 
         //itemCount: data == null ? 0 : data.length,
