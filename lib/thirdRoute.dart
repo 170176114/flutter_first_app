@@ -21,7 +21,7 @@ class ThirdRoute extends StatelessWidget {
           //crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             Text(
-              'This isßß Application',
+              'This is Application',
             ),
           ],
         ),
